@@ -24,7 +24,7 @@ let animation_started = false;
 
 function preload() {
   soundFormats("mp3", "ogg");
-  font = loadFont("font/AmsterdamHandWriting.ttf");
+  font = loadFont("font/AmsterdamHandWriting.otf");
   img = loadImage("images/sun.png");
   heart = loadImage("images/heart.png");
   song = loadSound("song/song.mp3");
@@ -49,6 +49,7 @@ function setup() {
   frameRate(60);
   rectMode(CENTER);
   angleMode(DEGREES);
+  pixelDensity(1);
   createCanvas(720, 1280);
 
   // Create petals
@@ -69,6 +70,8 @@ function setup() {
     height * 0.5,
     [40, 40, 40, 255]
   );
+
+  heart.resize(400, 400);
 }
 
 function draw() {
@@ -183,12 +186,6 @@ function draw() {
     pop();
   }
 
-  if (mouseIsPressed) {
-    if (animation_started == false) {
-      animation_started = true;
-      song.play();
-    }
-  }
   if (animation_started == true) {
     for (let i = 0; i < petals_group1.length; i++) {
       petals_group1[i].leave(1, i);
@@ -407,7 +404,6 @@ function draw() {
     if (petals_group6[0].iteration < -2300) {
       push();
       tint(255, map(petals_group6[0].iteration, -2300, -4300, 0, 30));
-      heart.resize(400, 400);
       image(heart, width * 0.1, height * 0.13);
       pop();
 
@@ -442,8 +438,12 @@ function draw() {
 }
 
 function touchStarted() {
-  animation_started = true;
-  if (!song.isPlaying()) {
-    song.play();
+  if (getAudioContext().state !== "running") {
+    userStartAudio();
+  }
+
+  if (!animation_started) {
+    animation_started = true;
+    song.loop(); // loop is safer than play on iOS
   }
 }
