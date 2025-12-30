@@ -24,7 +24,7 @@ let animation_started = false;
 
 function preload() {
   soundFormats("mp3", "ogg");
-  font = loadFont("font/AmsterdamHandWriting.ttf");
+  font = loadFont("font/AmsterdamHandwriting.ttf");
   img = loadImage("images/sun.png");
   heart = loadImage("images/heart.png");
   song = loadSound("song/song.mp3");
